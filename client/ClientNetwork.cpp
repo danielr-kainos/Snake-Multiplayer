@@ -3,6 +3,19 @@
 #include "ClientNetwork.h"
 #include "Networking.h"
 
+void ClientNetwork::displayError(int errorCode)
+{
+	if (errorCode != 0)
+	{
+		std::string s = std::to_string(errorCode);
+		char const *pchar = s.c_str();
+		char *result = new char[100];
+		strcpy(result, message);
+		strcat(result, pchar);
+		message = result;
+	}
+	MessageBox(NULL, message, "Error", MB_OK);
+}
 
 ClientNetwork::ClientNetwork(char *ip, char *port)
 {
@@ -15,8 +28,8 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 
 	if (iResult != 0) 
 	{
-		printf("WSAStartup failed with error: %d\n", iResult);
-		exit(1);
+		message = "WSAStartup failed with error: %d\n";
+		displayError(iResult);
 	}
 
 	// set address info
@@ -30,9 +43,9 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 
 	if (iResult != 0)
 	{
-		printf("getaddrinfo failed with error: %d\n", iResult);
+		message = "getaddrinfo failed with error: %d\n";
+		displayError(iResult);
 		WSACleanup();
-		exit(1);
 	}
 
 	// attempt to connect to an address until one succeeds
@@ -44,9 +57,9 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 
 		if (ConnectSocket == INVALID_SOCKET)
 		{
-			printf("socket failed with error: %ld\n", WSAGetLastError());
+			message = "socket failed with error: %ld\n";
+			displayError(WSAGetLastError());
 			WSACleanup();
-			exit(1);
 		}
 
 		// connect to server
@@ -56,7 +69,8 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 		{
 			closesocket(ConnectSocket);
 			ConnectSocket = INVALID_SOCKET;
-			printf("The server is down... did not connect");
+			message = "The server is down... did not connect";
+			displayError(0);
 		}
 	}
 
@@ -66,9 +80,9 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 	// check if connection failed
 	if (ConnectSocket == INVALID_SOCKET) 
 	{
-		printf("Unable to connect to server!\n");
+		message = "Unable to connect to server!\n";
+		displayError(0);
 		WSACleanup();
-		exit(1);
 	}
 
 	// set the socket to be nonblocking
@@ -77,10 +91,10 @@ ClientNetwork::ClientNetwork(char *ip, char *port)
 	iResult = ioctlsocket(ConnectSocket, FIONBIO, &iMode);
 	if (iResult == SOCKET_ERROR)
 	{
-		printf("ioctlsocket failed with error: %d\n", WSAGetLastError());
+		message = "ioctlsocket failed with error: \n";
+		displayError(WSAGetLastError());
 		closesocket(ConnectSocket);
 		WSACleanup();
-		exit(1);
 	}
 
 	// disable Nagle's algorithm to send actions immediately instead of combining packets
@@ -100,10 +114,10 @@ int ClientNetwork::receivePackets(char *recvbuf)
 
 	if (iResult == 0)
 	{
-		printf("Connection closed\n");
+		message = "Connection closed\n";
+		displayError(0);
 		closesocket(ConnectSocket);
 		WSACleanup();
-		exit(1);
 	}
 
 	return iResult;

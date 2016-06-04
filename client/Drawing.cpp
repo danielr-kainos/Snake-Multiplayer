@@ -18,8 +18,8 @@ void Drawing::Init(HWND hWnd)
 	HMENU hMenu, hSubMenu;
 
 	hMenu = CreateMenu();
-
 	hSubMenu = CreatePopupMenu();
+	
 	AppendMenu(hSubMenu, MF_STRING, ID_FILE_NEWGAME, "&New Game");
 	AppendMenu(hSubMenu, MF_STRING, ID_FILE_EXIT, "&Exit");
 	AppendMenu(hMenu, MF_STRING | MF_POPUP, UINT(hSubMenu), "&File");
