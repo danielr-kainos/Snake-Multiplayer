@@ -24,11 +24,21 @@ void ServerGame::update()
 		client_id++;
 	}
 
-	receiveFromClients();
+	receiveFromClients(client_id);
 }
 
+void ServerGame::gameLobby(static unsigned int client_id)
+{
+	if (client_id != 4) {
+		printf("Players in lobby: %d.\nNeed: %d more to start.\n", client_id, 4 - client_id);
+	}
+	else {
+		printf("All players are connected, waiting for a game to start. \n");
+		sendInitialPackets(); // this line should initialize a new game
+	}
+}
 
-void ServerGame::receiveFromClients()
+void ServerGame::receiveFromClients(static unsigned int client_id)
 {
 	Packet packet;
 	std::map<unsigned int, SOCKET>::iterator iter;
@@ -79,4 +89,16 @@ void ServerGame::sendActionPackets() const
 	packet.serialize(packet_data);
 
 	network->sendToAll(packet_data, packet_size);
+}
+
+void ServerGame::sendInitialPackets()
+{
+	// send initial packet
+	// TODO: write an initializer for game start, im not sure if the code below works properly
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+	Packet packet;
+	packet.packet_type = INIT_CONNECTION;
+	packet.serialize(packet_data);
+	NetworkServices::sendMessage(network->ClientSocket, packet_data, packet_size);
 }
