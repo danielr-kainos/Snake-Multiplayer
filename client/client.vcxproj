@@ -123,6 +123,7 @@
     <ClCompile Include="ClientGame.cpp" />
     <ClCompile Include="ClientNetwork.cpp" />
     <ClCompile Include="Drawing.cpp" />
+    <ClCompile Include="Edit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientGame.h" />

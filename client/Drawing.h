@@ -30,7 +30,7 @@ class Drawing
 	static const HFONT font; // font for writing status informations - scores, etc.
 
 public:
-	static void Init(HWND hWnd);
+	static void Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow);
 	static void SetBG(HWND hWnd);
 	static void ClearScreen(HWND hWnd);
 	static void DrawSquare(HWND hWnd, int xGrid, int yGrid, TileTypeEnum tile);

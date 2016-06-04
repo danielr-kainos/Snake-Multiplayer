@@ -14,7 +14,7 @@ class ServerNetwork
 	
 
 public:
-	SOCKET ClientSocket; // socket to give to the clients
+	SOCKET ClientSocket; // socket to give to the clients IMPORTANT: i've moved it form private section above
 	std::map<unsigned int, SOCKET> sessions; // table to keep track of each client's socket
 
 	explicit ServerNetwork(char *port);

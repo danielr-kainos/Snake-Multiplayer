@@ -62,6 +62,7 @@ void ServerGame::receiveFromClients(static unsigned int client_id)
 			switch (packet.packet_type) {
 			case INIT_CONNECTION:
 				printf("server received init packet from client\n");
+				gameLobby(client_id);
 				sendActionPackets();
 				break;
 			case ACTION_EVENT:
