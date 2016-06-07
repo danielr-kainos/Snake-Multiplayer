@@ -13,13 +13,18 @@ const HFONT Drawing::font = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, DEFAULT_CHARSET,
 	OUT_TT_PRECIS, 0, CLEARTYPE_QUALITY, FF_MODERN, "Courier New");
 
 
-void Drawing::Init(HWND hWnd)
+void Drawing::Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow)
 {
 	HMENU hMenu, hSubMenu;
 
 	hMenu = CreateMenu();
 
+	HWND hText = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER |
+		WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL, 5, 5, 150, 150, hWnd, NULL, hInstance, NULL);
+	ShowWindow(hText, nCmdShow);
+	UpdateWindow(hText);
 	hSubMenu = CreatePopupMenu();
+	
 	AppendMenu(hSubMenu, MF_STRING, ID_FILE_NEWGAME, "&New Game");
 	AppendMenu(hSubMenu, MF_STRING, ID_FILE_EXIT, "&Exit");
 	AppendMenu(hMenu, MF_STRING | MF_POPUP, UINT(hSubMenu), "&File");
