@@ -21,6 +21,7 @@ void ServerGame::update()
 	if (player_count < MAX_PLAYERS && network->acceptNewClient(player_count))
 	{
 		printf("client %d has connected to the server\n", ++player_count);
+		gameLobby();
 		initializePlayer(player_count);
 		sendInitialPacket(player_count);
 		sendNewPlayerPacket(player_count);
@@ -29,6 +30,15 @@ void ServerGame::update()
 	receiveFromClients();
 }
 
+void ServerGame::gameLobby()
+{
+	if (player_count != 4) {
+		printf("Players in lobby: %d.\nNeed: %d more to start.\n", player_count, 4 - player_count);
+	}
+	else {
+		printf("All players are connected, waiting for a game to start. \n");
+	}
+}
 
 void ServerGame::receiveFromClients()
 {

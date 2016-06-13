@@ -26,6 +26,7 @@ public:
 
 	void update();
 	void receiveFromClients();
+	void gameLobby();
 
 private:
 	void handleActionPacket(unsigned char id, int direction);
